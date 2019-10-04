@@ -17,7 +17,7 @@ namespace DattingApp.API.Data
         {
             var user = await _context.Users.FirstOrDefaultAsync(x => x.Username == username);
             
-            if(user==null)
+            if(user==null)  
             return null;
 
             if(!VerifyPasswordHash(password, user.PasswordHash, user.PasswordSalt))
