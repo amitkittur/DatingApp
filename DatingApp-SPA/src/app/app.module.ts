@@ -1,4 +1,4 @@
-import { BrowserModule } from '@angular/platform-browser';
+import { BrowserModule, HammerGestureConfig, HAMMER_GESTURE_CONFIG } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
@@ -22,10 +22,20 @@ import { JwtModule } from '@auth0/angular-jwt';
 import { MemberDetailComponent } from './members/member-detail/member-detail.component';
 import { MemberDetailResolver } from './_resolvers/member-detail.resolver';
 import { MemberListResolver } from './_resolvers/member-list.resolver';
+import { MemberEditComponent } from './members/member-edit/member-edit.component';
+import 'hammerjs';
+import { NgxGalleryModule } from 'ngx-gallery';
 
 export function tokenGetter() {
    return localStorage.getItem('token');
  }
+
+export class CustomHammerConfig extends HammerGestureConfig  {
+   overrides = {
+       pinch: { enable: false },
+       rotate: { enable: false }
+   };
+}
 
 @NgModule({
    declarations: [
@@ -37,7 +47,8 @@ export function tokenGetter() {
       ListComponent,
       MessagesComponent,
       MemberCardComponent,
-      MemberDetailComponent
+      MemberDetailComponent,
+      MemberEditComponent
    ],
    imports: [
       BrowserModule,
@@ -50,10 +61,11 @@ export function tokenGetter() {
            // tslint:disable-next-line: object-literal-shorthand
            tokenGetter: tokenGetter,
            whitelistedDomains: ['localhost:5000'],
-           blacklistedRoutes: ['localhost:5000/api/uath']
+           blacklistedRoutes: ['localhost:5000/api/auth']
          }
        }),
-       TabsModule.forRoot()
+       TabsModule.forRoot(),
+       NgxGalleryModule
    ],
    providers: [
       AuthService,
@@ -61,7 +73,8 @@ export function tokenGetter() {
       ErrorInterceptorProvider,
       UserService,
       MemberDetailResolver,
-      MemberListResolver
+      MemberListResolver,
+      { provide: HAMMER_GESTURE_CONFIG, useClass: CustomHammerConfig },
    ],
    bootstrap: [
       AppComponent
