@@ -25,6 +25,9 @@ import { MemberListResolver } from './_resolvers/member-list.resolver';
 import { MemberEditComponent } from './members/member-edit/member-edit.component';
 import 'hammerjs';
 import { NgxGalleryModule } from 'ngx-gallery';
+import { MemberEditResolver } from './_resolvers/member-edit.resolver';
+import { AuthGuard } from './_guards/auth.guard';
+import { PreventUnchangedChanges } from './_guards/prevent-unchanged-changes.guard';
 
 export function tokenGetter() {
    return localStorage.getItem('token');
@@ -69,11 +72,14 @@ export class CustomHammerConfig extends HammerGestureConfig  {
    ],
    providers: [
       AuthService,
+      AuthGuard,
+      PreventUnchangedChanges,
       AlertifyService,
       ErrorInterceptorProvider,
       UserService,
       MemberDetailResolver,
       MemberListResolver,
+      MemberEditResolver,
       { provide: HAMMER_GESTURE_CONFIG, useClass: CustomHammerConfig },
    ],
    bootstrap: [
